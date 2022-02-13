@@ -9,7 +9,7 @@
   "scripts": {
     "build": "npm run clean && npm install && npm run lint && tsc",
     "watch": "tsc -w",
-    "test": "jest",
+    "test": "jest --verbose",
     "clean": "rm -rf node_modules && rm -rf dist && rm -rf cdk.out",
     "cdk": "cdk",
     "lint": "eslint lib/* test/* --ext .ts --fix"
