@@ -1,21 +1,28 @@
 {
   "name": "blog-infrastructure-cdk",
   "version": "0.1.0",
+  "license": "UNLICENSED",
+  "main": "dist/lib/app.js",
   "bin": {
-    "blog-infrastructure-cdk": "bin/blog-infrastructure-cdk.js"
+    "blog-infrastructure-cdk": "dist/lib/app.js"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "npm run clean && npm install && npm run lint && tsc",
     "watch": "tsc -w",
     "test": "jest",
-    "cdk": "cdk"
+    "clean": "rm -rf node_modules && rm -rf dist && rm -rf cdk.out",
+    "cdk": "cdk",
+    "lint": "eslint lib/* test/* --ext .ts --fix"
   },
   "devDependencies": {
     "@types/jest": "^26.0.10",
     "@types/node": "10.17.27",
+    "@typescript-eslint/eslint-plugin": "^5.11.0",
+    "@typescript-eslint/parser": "^5.11.0",
+    "aws-cdk": "2.7.0",
+    "eslint": "^8.9.0",
     "jest": "^26.4.2",
     "ts-jest": "^26.2.0",
-    "aws-cdk": "2.7.0",
     "ts-node": "^9.0.0",
     "typescript": "~3.9.7"
   },

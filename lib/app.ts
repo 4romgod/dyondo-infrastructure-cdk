@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
-import { BlogInfrastructureCdkStack } from '../lib/blog-infrastructure-cdk-stack';
+import { BlogApiEcsStack } from './stack/blog-api-ecs-stack';
 
 const app = new cdk.App();
-new BlogInfrastructureCdkStack(app, 'BlogInfrastructureCdkStack', {
+
+new BlogApiEcsStack(app, 'BlogApiEcsStack', {
   /* If you don't specify 'env', this stack will be environment-agnostic.
    * Account/Region-dependent features and context lookups will not work,
    * but a single synthesized template can be deployed anywhere. */
