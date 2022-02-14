@@ -1,5 +1,6 @@
 {
   "name": "blog-infrastructure-cdk",
+  "description": "AWS CDK Infrastructure for Dyondo muliti-user blogging platform",
   "version": "0.1.0",
   "license": "UNLICENSED",
   "main": "dist/lib/app.js",
@@ -8,11 +9,16 @@
   },
   "scripts": {
     "build": "npm run clean && npm install && npm run lint && tsc",
+    "clean": "rm -rf node_modules && rm -rf dist && rm -rf cdk.out",
     "watch": "tsc -w",
     "test": "jest --verbose",
-    "clean": "rm -rf node_modules && rm -rf dist && rm -rf cdk.out",
     "cdk": "cdk",
     "lint": "eslint lib/* test/* --ext .ts --fix"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "2.7.0",
+    "constructs": "^10.0.0",
+    "source-map-support": "^0.5.16"
   },
   "devDependencies": {
     "@types/jest": "^26.0.10",
@@ -25,10 +31,5 @@
     "ts-jest": "^26.2.0",
     "ts-node": "^9.0.0",
     "typescript": "~3.9.7"
-  },
-  "dependencies": {
-    "aws-cdk-lib": "2.7.0",
-    "constructs": "^10.0.0",
-    "source-map-support": "^0.5.16"
   }
 }
