@@ -1,6 +1,6 @@
 import { App } from 'aws-cdk-lib';
 import { Template } from 'aws-cdk-lib/assertions';
-import { BlogApiEcsStack } from '../../lib/stack/blog-api-ecs-stack';
+import { BlogApiEcsStack } from '../../lib/stack/dyondo-api-ecs-stack';
 
 describe('BlogApiEcsStack', () => {
     const app = new App();

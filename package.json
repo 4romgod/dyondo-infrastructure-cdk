@@ -1,5 +1,5 @@
 {
-  "name": "blog-infrastructure-cdk",
+  "name": "@dyondo/infrastructure-cdk",
   "description": "AWS CDK Infrastructure for Dyondo muliti-user blogging platform",
   "version": "0.1.0",
   "license": "UNLICENSED",
@@ -18,6 +18,7 @@
   "dependencies": {
     "aws-cdk-lib": "2.7.0",
     "constructs": "^10.0.0",
+    "dyondo-api": "github:4romgod/dyondo-api",
     "source-map-support": "^0.5.16"
   },
   "devDependencies": {
