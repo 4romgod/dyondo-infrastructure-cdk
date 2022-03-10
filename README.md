@@ -1,6 +1,10 @@
-# Welcome to your CDK TypeScript project!
+# Dyondo AWS Infrastructure with CDK
 
-This is a blank project for TypeScript development with CDK.
+This CDK project contains for Dyondo infrastructure, for both the frontend and the API.
+
+The API will be hosted as a Fargate service.
+
+The Frontend will be hosted in ???
 
 The `cdk.json` file tells the CDK Toolkit how to execute your app.
 

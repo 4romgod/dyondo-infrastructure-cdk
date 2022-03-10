@@ -1,14 +1,13 @@
-#!/usr/bin/env node
-import 'source-map-support/register';
-import * as cdk from 'aws-cdk-lib';
+import { App } from 'aws-cdk-lib';
 import { DyondoApiEcsStack } from './stack/dyondo-api-ecs-stack';
+import { DEV_DUB } from './constants';
 
-const app = new cdk.App();
+const app = new App();
 
-const dyondoApiEcsStack = new DyondoApiEcsStack(app, 'BlogApiEcsStack', {
-  dockerFilePath: "",
-  env: { 
-    account: "123456789012",
-    region: "us-east-1"
+new DyondoApiEcsStack(app, 'BlogApiEcsStack', {
+  dockerFilePath: 'dyondo-api', // Path where Dockerfile resides
+  env: {
+    account: DEV_DUB.awsAccountId,
+    region: DEV_DUB.awsRegion
   }
 });

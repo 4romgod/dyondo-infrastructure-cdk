@@ -8,12 +8,12 @@
     "blog-infrastructure-cdk": "dist/lib/app.js"
   },
   "scripts": {
-    "build": "npm run clean && npm install && npm run lint && tsc",
-    "clean": "rm -rf node_modules && rm -rf dist && rm -rf cdk.out",
+    "build": "npm run clean && npm install && npm run lint && npm run test && echo 'Transpilling typescript...' && tsc",
+    "clean": "echo 'Cleaning up...' && rm -rf node_modules && rm -rf dist && rm -rf cdk.out",
     "watch": "tsc -w",
     "test": "jest --verbose",
     "cdk": "cdk",
-    "lint": "eslint lib/* test/* --ext .ts --fix"
+    "lint": "echo 'Eslint checking code style...' && eslint lib/* test/* --ext .ts --fix"
   },
   "dependencies": {
     "aws-cdk-lib": "2.7.0",
