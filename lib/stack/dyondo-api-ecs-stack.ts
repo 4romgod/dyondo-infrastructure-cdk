@@ -3,7 +3,9 @@ import { Cluster } from 'aws-cdk-lib/aws-ecs';
 import { ApplicationLoadBalancedFargateService } from 'aws-cdk-lib/aws-ecs-patterns';
 import { Stack, StackProps, App } from 'aws-cdk-lib';
 import { FargateTaskConstruct } from '../construct/fargate-task-construct';
+import { EcrRepoConstruct } from '../construct/ecr-construct';
 import { APP_NAME } from '../constants';
+import 'dotenv/config';
 
 export interface DyondoApiEcsServiceProps extends StackProps {
     readonly dockerFilePath: string
@@ -13,20 +15,24 @@ export class DyondoApiEcsStack extends Stack {
     constructor(scope: App, id: string, props: DyondoApiEcsServiceProps) {
         super(scope, id, props);
 
-        const dyondoApiVpc = new Vpc(this, `${APP_NAME}VpcId`, {
-            vpcName: `${APP_NAME}Vpc`,
+        const dyondoApiVpc = new Vpc(this, `${APP_NAME}ApiVpcId`, {
+            vpcName: `${APP_NAME}ApiVpc`,
             maxAzs: 3
         });
 
-        const dyondoApiEcsCluster = new Cluster(this, `${APP_NAME}EcsClusterId`, {
-            clusterName: `${APP_NAME}EcsCluster`,
+        const dyondoApiEcsCluster = new Cluster(this, `${APP_NAME}ApiEcsClusterId`, {
+            clusterName: `${APP_NAME}ApiEcsCluster`,
             vpc: dyondoApiVpc,
             containerInsights: true
         });
 
-        const dyondoApiTaskDefinition = new FargateTaskConstruct(this, `${APP_NAME}FargateTaskConstructId`, {
+        const ecrRepository = new EcrRepoConstruct(this, `${APP_NAME}ApiEcrRepoConstructId`, {
+            appName: APP_NAME
+        });
+
+        const dyondoApiTaskDefinition = new FargateTaskConstruct(this, `${APP_NAME}ApiFargateTaskConstructId`, {
             appName: APP_NAME,
-            dockerFilePath: 'dyondo-api',
+            ecrRepositoryUri: ecrRepository.ecrRepo.repositoryUri,
             envVars: {
                 SENDGRID_API_KEY: `${process.env.SENDGRID_API_KEY}`,
                 JWT_SECRET: `${process.env.SENDGRID_API_KEY}`,
@@ -40,8 +46,8 @@ export class DyondoApiEcsStack extends Stack {
             }
         });
 
-        new ApplicationLoadBalancedFargateService(this, `${APP_NAME}FargateServiceId`, {
-            serviceName: `${APP_NAME}FargateService`,
+        new ApplicationLoadBalancedFargateService(this, `${APP_NAME}ApiFargateServiceId`, {
+            serviceName: `${APP_NAME}ApiFargateService`,
             cluster: dyondoApiEcsCluster,
             desiredCount: 1,
             taskDefinition: dyondoApiTaskDefinition.fargateTask,

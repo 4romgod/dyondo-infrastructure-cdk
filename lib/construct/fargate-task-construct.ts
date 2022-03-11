@@ -3,11 +3,11 @@ import { FargateTaskDefinition, Protocol } from 'aws-cdk-lib/aws-ecs';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Construct } from 'constructs';
 import { DyondoEnvVars } from '../interfaces';
-import * as path from 'path';
+import { Repository } from 'aws-cdk-lib/aws-ecr';
 
 export interface FargateTaskConstructProps {
     appName: string;
-    dockerFilePath: string;
+    ecrRepositoryUri: string
     envVars: DyondoEnvVars;
 }
 
@@ -18,21 +18,21 @@ export class FargateTaskConstruct extends Construct {
     constructor(scope: Construct, id: string, props: FargateTaskConstructProps) {
         super(scope, id);
 
-        const taskDefinition = new FargateTaskDefinition(this, `${props.appName}TaskDefinitionId`, {
+        const taskDefinition = new FargateTaskDefinition(this, `${props.appName}ApiTaskDefinitionId`, {
             memoryLimitMiB: 1024,
             cpu: 512
         });
 
-        taskDefinition.addContainer(`${props.appName}ContainterId`, {
-            containerName: `${props.appName}Container`,
+        taskDefinition.addContainer(`${props.appName}ApiContainterId`, {
+            containerName: `${props.appName}ApiContainer`,
             portMappings: [{
                 protocol: Protocol.TCP,
                 containerPort: 8000
             }],
-            image: ContainerImage.fromAsset(path.resolve(props.dockerFilePath)),
+            image: ContainerImage.fromRegistry(props.ecrRepositoryUri),
             environment: {...props.envVars},
             logging: LogDrivers.awsLogs({
-                streamPrefix: `${props.appName}-on-fargate`,
+                streamPrefix: `${props.appName}-api-on-fargate`,
                 logRetention: RetentionDays.ONE_MONTH
             })
         });

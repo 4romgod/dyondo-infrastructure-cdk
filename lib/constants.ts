@@ -7,4 +7,5 @@ export const DEV_DUB: ServiceAccount = {
     stage: Stage.DEV
 };
 
-export const APP_NAME = 'DyondoApi';
+export const APP_NAME = 'Dyondo';
+export const API_NAME = `${APP_NAME}Api`;
