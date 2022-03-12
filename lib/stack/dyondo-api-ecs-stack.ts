@@ -1,11 +1,10 @@
 import { Vpc } from 'aws-cdk-lib/aws-ec2';
-import { Cluster, FargateTaskDefinition } from 'aws-cdk-lib/aws-ecs';
+import { Cluster } from 'aws-cdk-lib/aws-ecs';
 import { ApplicationLoadBalancedFargateService } from 'aws-cdk-lib/aws-ecs-patterns';
 import { Stack, StackProps, App } from 'aws-cdk-lib';
 import { FargateTaskConstruct } from '../construct/fargate-task-construct';
 import { EcrRepoConstruct } from '../construct/ecr-construct';
 import { DyondoPipelineConstruct } from '../construct/ecr-pipeline-construct';
-import { Repository } from 'aws-cdk-lib/aws-ecr';
 import { APP_NAME } from '../constants';
 import 'dotenv/config';
 

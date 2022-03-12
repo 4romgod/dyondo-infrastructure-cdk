@@ -1,5 +1,5 @@
 import { SecretValue } from 'aws-cdk-lib';
-import { Pipeline, Artifact, ArtifactPath } from 'aws-cdk-lib/aws-codepipeline';
+import { Pipeline, Artifact } from 'aws-cdk-lib/aws-codepipeline';
 import { GitHubSourceAction, GitHubTrigger, CodeBuildAction, EcsDeployAction, ManualApprovalAction } from 'aws-cdk-lib/aws-codepipeline-actions';
 import { BuildSpec, LinuxBuildImage, Source, Project, FilterGroup, EventAction } from 'aws-cdk-lib/aws-codebuild';
 import { ApplicationLoadBalancedFargateService } from 'aws-cdk-lib/aws-ecs-patterns';
@@ -52,7 +52,7 @@ export class DyondoPipelineConstruct extends Construct {
         const dyondoApiDeployAction = new EcsDeployAction({
             actionName: `Deploy${APP_NAME}ApiService`,
             service: props.fargateService.service,
-            imageFile: new ArtifactPath(dyondoApiBuildOutput, `imagedefinitions.json`)
+            input: dyondoApiBuildOutput
         });
 
         new Pipeline(this, `${APP_NAME}PipelineId`, {
@@ -91,7 +91,7 @@ const buildDyondoApiImage = (scope: Construct, props: DyondoPipelineConstructPro
         ],
     });
 
-    const project = new Project(scope, `${APP_NAME}ApiEcrImageDeploymentProjectId`, {
+    const project = new Project(scope, `${APP_NAME}ApiEcrImageProjectId`, {
         projectName: `${APP_NAME}ApiEcrImageDeployment`,
         description: 'This project retrives a Github repo, builds it, create a docker image, then push the image to ECR',
         source: gitHubSource,
@@ -115,21 +115,18 @@ const buildDyondoApiImage = (scope: Construct, props: DyondoPipelineConstructPro
             phases: {
                 pre_build: {
                     commands: [
-                        'env',
-                        'export TAG=${CODEBUILD_RESOLVED_SOURCE_VERSION}'
+                        '$(aws ecr get-login --no-include-email)',
                     ]
                 },
                 build: {
                     commands: [
-                        `docker build -t $ECR_REPO_URI:$TAG .`,
-                        '$(aws ecr get-login --no-include-email)',
-                        'docker push $ECR_REPO_URI:$TAG'
+                        'docker build -t $ECR_REPO_URI:latest .',
+                        'docker push $ECR_REPO_URI:latest'
                     ]
                 },
                 post_build: {
                     commands: [
-                        'echo "In Post-Build Stage"',
-                        "printf '[{\"name\":\"%s\",\"imageUri\":\"%s\"}]' $CONTAINER_NAME $ECR_REPO_URI:$TAG > imagedefinitions.json",
+                        "printf '[{\"name\":\"%s\",\"imageUri\":\"%s\"}]' $CONTAINER_NAME $ECR_REPO_URI:latest > imagedefinitions.json",
                         "pwd; ls -al; cat imagedefinitions.json"
                     ]
                 }
@@ -149,7 +146,7 @@ const buildDyondoApiImage = (scope: Construct, props: DyondoPipelineConstructPro
             'ecr:BatchGetImage',
             'ecr:GetDownloadUrlForLayer'
         ],
-        resources: [`${props.ecsCluster.clusterArn}`],
+        resources: ['*'],
     }));
 
     return project;

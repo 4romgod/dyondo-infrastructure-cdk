@@ -1,6 +1,5 @@
 import { PublicHostedZone } from 'aws-cdk-lib/aws-route53'
 import { Stack, StackProps, App } from 'aws-cdk-lib';
-import { API_NAME } from '../constants';
 
 export type DyondoRoute53Props = StackProps
 

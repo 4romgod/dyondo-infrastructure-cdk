@@ -1,4 +1,4 @@
-import { Duration, RemovalPolicy } from 'aws-cdk-lib';
+import { RemovalPolicy } from 'aws-cdk-lib';
 import { Repository, TagStatus } from 'aws-cdk-lib/aws-ecr';
 import { Construct } from 'constructs';
 
@@ -22,12 +22,6 @@ export class EcrRepoConstruct extends Construct {
                     rulePriority: 1,
                     description: 'Keep images to a maximum',
                     maxImageCount: 10,
-                    tagStatus: TagStatus.ANY,
-                },
-                {
-                    rulePriority: 2,
-                    description: 'Remove all very old images',
-                    maxImageAge: Duration.days(365),
                     tagStatus: TagStatus.ANY,
                 }
             ]
