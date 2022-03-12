@@ -9,3 +9,4 @@ export const DEV_DUB: ServiceAccount = {
 
 export const APP_NAME = 'Dyondo';
 export const API_NAME = `${APP_NAME}Api`;
+export const API_CONTAINER_NAME = `${API_NAME}Container`;

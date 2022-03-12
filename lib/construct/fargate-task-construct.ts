@@ -3,7 +3,7 @@ import { FargateTaskDefinition, Protocol } from 'aws-cdk-lib/aws-ecs';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Construct } from 'constructs';
 import { DyondoEnvVars } from '../interfaces';
-import { Repository } from 'aws-cdk-lib/aws-ecr';
+import { API_CONTAINER_NAME } from '../constants';
 
 export interface FargateTaskConstructProps {
     appName: string;
@@ -24,12 +24,12 @@ export class FargateTaskConstruct extends Construct {
         });
 
         taskDefinition.addContainer(`${props.appName}ApiContainterId`, {
-            containerName: `${props.appName}ApiContainer`,
+            containerName: `${API_CONTAINER_NAME}`,
             portMappings: [{
                 protocol: Protocol.TCP,
                 containerPort: 8000
             }],
-            image: ContainerImage.fromRegistry(props.ecrRepositoryUri),
+            image: ContainerImage.fromRegistry('public.ecr.aws/itx-devops/curlimages_curl:latest'), // find a way to use own repo, and bootstrap the repo
             environment: {...props.envVars},
             logging: LogDrivers.awsLogs({
                 streamPrefix: `${props.appName}-api-on-fargate`,
