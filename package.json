@@ -16,10 +16,9 @@
     "lint": "echo 'Eslint checking code style...' && eslint lib/* test/* --ext .ts --fix"
   },
   "dependencies": {
-    "aws-cdk-lib": "2.7.0",
+    "aws-cdk-lib": "2.16.0",
     "constructs": "^10.0.0",
     "dotenv": "^16.0.0",
-    "dyondo-api": "github:4romgod/dyondo-api",
     "source-map-support": "^0.5.16"
   },
   "devDependencies": {
@@ -27,7 +26,7 @@
     "@types/node": "10.17.27",
     "@typescript-eslint/eslint-plugin": "^5.11.0",
     "@typescript-eslint/parser": "^5.11.0",
-    "aws-cdk": "2.7.0",
+    "aws-cdk": "2.16.0",
     "eslint": "^8.9.0",
     "jest": "^26.4.2",
     "ts-jest": "^26.2.0",
